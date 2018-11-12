@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 
 import Pattern from './components/Pattern'
 import Track from './components/Track'
