@@ -10,7 +10,7 @@ export default class Clock {
     noteLength = 0.05;
     swing = 0;
     constructor(audioContext) {
-        this.audioContext = new AudioContext();
+        this.audioContext = audioContext;
     }
 
     start() {

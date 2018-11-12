@@ -13,12 +13,14 @@ import hihat from './assets/sounds/hihat.wav';
 
 import getAudioSource from './services/Audio';
 
+const audioContext = new AudioContext();
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       ready: false,
-      clock: new Clock(),
+      clock: new Clock(audioContext),
       tempo: 90,
       swing: 0,
     }
@@ -29,7 +31,6 @@ class App extends Component {
   }
   componentDidMount() {
     this.state.clock.start();
-    const audioContext = new AudioContext();
 
     Promise.all([
       getAudioSource({url: kick, audioContext}),
