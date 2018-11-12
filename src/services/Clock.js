@@ -8,13 +8,14 @@ export default class Clock {
     noteResolution = 0;
     scheduleAheadTime = 0.1;
     noteLength = 0.05;
+    swing = 0;
     constructor(audioContext) {
         this.audioContext = new AudioContext();
     }
 
     start() {
         this.isPlaying = true;
-        this.current16thNote = 0;
+        this.current16thNote = 15;
         this.nextNoteTime = this.audioContext.currentTime;
         clearInterval(this.interval);
         this.interval = setInterval(() => {
@@ -42,11 +43,16 @@ export default class Clock {
     schedule() {
         while (this.nextNoteTime < this.audioContext.currentTime + this.scheduleAheadTime ) {
             this.nextNote();
+            // Calculate swing
+            let nextNoteWithSwing = this.nextNoteTime;
+            if (this.swing > 0 && (this.current16thNote+1) % 2 === 0) {
+                nextNoteWithSwing += this.swing / 10 * 0.25 * 60.0 / this.tempo;
+            }
             this.listeners.map(listener => {
                 listener.call(
                     undefined,
                     this.current16thNote,
-                    this.nextNoteTime,
+                    nextNoteWithSwing,
                 )
             });
         }
@@ -59,5 +65,21 @@ export default class Clock {
         return () => {
             this.listeners.splice(this.listeners.indexOf(listener), 1);
         }
+    }
+
+    setTempo(tempo) {
+        this.tempo = tempo;
+    }
+
+    getTempo() {
+        return this.tempo;
+    }
+
+    setSwing(swing) {
+        this.swing = swing;
+    }
+
+    getSwing() {
+        return this.swing;
     }
 }

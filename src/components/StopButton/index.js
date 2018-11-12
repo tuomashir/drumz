@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default function StopButton() {
+export default function StopButton(props) {
     return (
-        <div className="StopButton">Stop</div>
+        <button className="StopButton" onClick={props.onClick}>Stop</button>
     )
 }

@@ -3,6 +3,8 @@ import './App.css';
 
 import Pattern from './components/Pattern'
 import Track from './components/Track'
+import PlayButton from './components/PlayButton'
+import StopButton from './components/StopButton'
 
 import Clock from './services/Clock';
 
@@ -18,7 +20,13 @@ class App extends Component {
     this.state = {
       ready: false,
       clock: new Clock(),
+      tempo: 90,
+      swing: 0,
     }
+    this.startClock = this.startClock.bind(this);
+    this.stopClock = this.stopClock.bind(this);
+    this.handleTempoChange = this.handleTempoChange.bind(this);
+    this.handleSwingChange = this.handleSwingChange.bind(this);
   }
   componentDidMount() {
     this.state.clock.start();
@@ -35,10 +43,38 @@ class App extends Component {
       })
     });
   }
+  startClock() {
+    this.state.clock.start();
+  }
+  stopClock() {
+    this.state.clock.stop();
+  }
+  handleTempoChange(e) {
+    this.setState({
+      tempo: e.target.value
+    });
+    this.state.clock.setTempo(e.target.value);
+  }
+  handleSwingChange(e) {
+    this.setState({
+      swing: e.target.value
+    });
+    this.state.clock.setSwing(e.target.value);
+  }
   render() {
     if (this.state.ready) {
       return (
         <div className="App">
+          <div style={{display: 'flex'}}>
+            <PlayButton onClick={this.startClock} />
+            <StopButton onClick={this.stopClock} />
+            <div>
+              Tempo: <input type="number" name="tempo" value={this.state.tempo} onChange={this.handleTempoChange} />
+            </div>
+            <div>
+              Swing: <input type="number" name="swing" min="0" max="10" value={this.state.swing} onChange={this.handleSwingChange} />
+            </div>
+          </div>
           <Pattern length={16}>
             <Track key="track1" id="track1" clock={this.state.clock} createSource={this.state.sounds[0]} />
             <Track key="track2" id="track2" clock={this.state.clock} createSource={this.state.sounds[1]} />

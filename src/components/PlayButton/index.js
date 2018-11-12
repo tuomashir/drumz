@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default function PlayButton() {
+export default function PlayButton(props) {
     return (
-        <div className="PlayButton">Play</div>
+        <button className="PlayButton" onClick={props.onClick}>Start</button>
     )
 }
